@@ -18,7 +18,9 @@ class Onboardingpage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    MaterialPageRoute(
+                      builder: (_) => const RegistrationScreen(),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
