@@ -1,7 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:swachh_alert/screens/cameraLocation_screen.dart';
 import 'package:swachh_alert/screens/otp_screen.dart';
 import 'package:swachh_alert/services/apiServices.dart';
 

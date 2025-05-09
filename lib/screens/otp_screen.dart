@@ -200,6 +200,9 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     verifyOtp();
+                    otpControllers.forEach((controller) {
+                      controller.clear();
+                    });
                     Navigator.push(
                       context,
                       MaterialPageRoute(
