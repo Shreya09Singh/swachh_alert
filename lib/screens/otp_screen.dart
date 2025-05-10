@@ -101,13 +101,13 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: screenHeight * 0.03),
+              SizedBox(height: screenHeight * 0.24),
               // Center(
               //   child: Image.asset(AppAssets.verifyimg,
               //       width: screenWidth * 0.7, height: screenHeight * 0.35),
@@ -116,7 +116,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               Text(
                 'Verify Code',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.blue,
                   fontSize: screenWidth * 0.1,
                   fontWeight: FontWeight.bold,
                 ),
@@ -147,7 +147,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         TextSpan(
                           text: 'resend code in',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.blue,
                             fontSize: screenWidth * 0.035,
                           ),
                         ),
@@ -155,7 +155,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                           text:
                               '  00:${_remainingTime.toString().padLeft(2, '0')}',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.blue,
                             fontSize: screenWidth * 0.035,
                           ),
                         ),
@@ -182,7 +182,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       child: Text(
                         "didn't receive code?",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.blue,
                           fontSize: screenWidth * 0.036,
                           decoration: TextDecoration.underline,
                         ),
@@ -211,7 +211,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(22),
                     ),

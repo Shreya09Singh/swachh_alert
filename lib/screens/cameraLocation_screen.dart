@@ -1,24 +1,44 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:swachh_alert/model/sharepreference.dart';
+import 'package:swachh_alert/provider/location_provider.dart';
+import 'package:swachh_alert/screens/viewReport_screen.dart';
 import 'package:swachh_alert/widget/customtype.dart';
+import 'package:swachh_alert/widget/snakebar.dart';
 
-class CameraLocationAIPage extends StatefulWidget {
+class CameraLocationAIPage extends ConsumerStatefulWidget {
   const CameraLocationAIPage({Key? key}) : super(key: key);
 
   @override
-  State<CameraLocationAIPage> createState() => _CameraLocationAIPageState();
+  ConsumerState<CameraLocationAIPage> createState() =>
+      _CameraLocationAIPageState();
 }
 
-class _CameraLocationAIPageState extends State<CameraLocationAIPage> {
+class _CameraLocationAIPageState extends ConsumerState<CameraLocationAIPage> {
   File? _image;
   String? selectedcatagory;
+  String? currentAddress;
 
   final ImagePicker _picker = ImagePicker();
   final TextEditingController catagoryController = TextEditingController();
-  final List<String> categories = ["University", "Health", "Music", "Work"];
+  final List<String> categories = [
+    "Garbage Dump / Overflowing Bins",
+    "🚽 Unclean Public Toilet",
+    "🌊 Open Drainage / Sewage Leakage",
+    "🦴 Dead Animal in Public Area",
+    "🦟 Mosquito Breeding Spot / Stagnant Water",
+    "🐕 Stray Animal Waste",
+    "🛣 Dirty Road or Footpath",
+    "🏗 Construction Debris / Dumped Waste",
+    "🧴 Chemical Spill / Hazardous Waste",
+    "🔥 Burnt Garbage / Air Pollution Concern",
+    "⚠ Blocked Public Dustbin Access",
+    "❓ Other (Specify in Description)",
+  ];
 
   Future<void> _pickFromGallery() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
@@ -41,6 +61,8 @@ class _CameraLocationAIPageState extends State<CameraLocationAIPage> {
 
   @override
   Widget build(BuildContext context) {
+    final addressAsync = ref.watch(addressProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -48,15 +70,24 @@ class _CameraLocationAIPageState extends State<CameraLocationAIPage> {
         backgroundColor: Colors.white,
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: const Icon(Icons.location_pin, size: 30, color: Colors.red),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.location_pin, color: Colors.red),
+                  onPressed:
+                      () => ref.refresh(addressProvider), // Refresh location
+                ),
+                addressAsync.when(
+                  data: (address) => Text(address, textAlign: TextAlign.center),
+                  loading: () => const CircularProgressIndicator(),
+                  error: (err, _) => Text("Error: $err"),
+                ),
+              ],
             ),
           ),
         ],
+        // toolbarHeight: 100,
         centerTitle: true,
         elevation: 0,
         leading: Image.asset('assets/swachh_alert.png', height: 40, scale: 2),
@@ -214,8 +245,33 @@ class _CameraLocationAIPageState extends State<CameraLocationAIPage> {
 
             // Submit button
             ElevatedButton(
-              onPressed: () {
-                // TODO: Trigger AI logic
+              onPressed: () async {
+                final address = ref
+                    .read(addressProvider)
+                    .maybeWhen(data: (val) => val, orElse: () => 'No location');
+
+                if (_image == null || selectedcatagory == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select image and category"),
+                    ),
+                  );
+                  return;
+                }
+
+                await saveReport(
+                  imagePath: _image!.path,
+                  location: address,
+                  category: selectedcatagory!,
+                  description:
+                      "AI Description will appear here...", // Or real description
+                );
+
+                showReportSubmittedSnackbar(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReportSummaryPage()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

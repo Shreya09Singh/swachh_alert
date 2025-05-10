@@ -176,25 +176,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                       ),
                     ),
-                    // SizedBox(
-                    //   height: screenHeight * 0.065,
-                    //   width: screenWidth * 0.4,
-                    //   // child: OnboardingButton(
-                    //   //     onPressed: () {
-                    //   //       if (_formKey.currentState!.validate()) {
-                    //   //         _sendOtp();
-                    //   //         // Navigator.push(
-                    //   //         //   context,
-                    //   //         //   MaterialPageRoute(
-                    //   //         //     builder: (context) => OtpScreen(
-                    //   //         //       phoneNumber: _phoneController.text.trim(),
-                    //   //         //     ),
-                    //   //         //   ),
-                    //   //         // );
-                    //   //       }
-                    //   //     },
-                    //   //     buttonText: 'send otp')
-                    // ),
+
+                    SizedBox(height: screenHeight * 0.05),
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swachh_alert/screens/loginpage.dart';
+import 'package:swachh_alert/screens/viewReport_screen.dart';
 
 class Onboardingpage extends StatelessWidget {
   const Onboardingpage({super.key});
@@ -73,7 +74,14 @@ class Onboardingpage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReportSummaryPage(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       padding: const EdgeInsets.symmetric(
