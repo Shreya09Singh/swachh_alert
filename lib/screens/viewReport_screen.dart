@@ -34,6 +34,18 @@ class _ReportSummaryPageState extends State<ReportSummaryPage> {
     });
   }
 
+  Future<void> deleteReport(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> storedReports = prefs.getStringList('reports') ?? [];
+
+    if (index < storedReports.length) {
+      storedReports.removeAt(index);
+      await prefs.setStringList('reports', storedReports);
+    }
+
+    loadReports(); // refresh list after deletion
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,26 +59,37 @@ class _ReportSummaryPageState extends State<ReportSummaryPage> {
                   final report = reports[index];
                   return Card(
                     margin: const EdgeInsets.all(10),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          if (report['imagePath'] != null &&
-                              File(report['imagePath']).existsSync())
-                            Image.file(
-                              File(report['imagePath']),
-                              height: 170,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          SizedBox(height: 10),
-                          Text('📍 Location: ${report['location']}'),
-                          Text('📂 Category: ${report['category']}'),
-                          Text('📝 Description: ${report['description']}'),
-                        ],
-                      ),
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('📍 Location: ${report['location']}'),
+                              Text('📂 Category: ${report['category']}'),
+                              Text('📝 Description: ${report['description']}'),
+                              const SizedBox(height: 8),
+                              if (report['imagePath'] != null &&
+                                  File(report['imagePath']).existsSync())
+                                Image.file(
+                                  File(report['imagePath']),
+                                  height: 150,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => deleteReport(index),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
